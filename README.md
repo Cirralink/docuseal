@@ -83,9 +83,14 @@ Download docker-compose.yml into your private server:
 curl https://raw.githubusercontent.com/docusealco/docuseal/master/docker-compose.yml > docker-compose.yml
 ```
 
-Run the app under a custom domain over https using docker compose (make sure your DNS points to the server to automatically issue ssl certs with Caddy):
+Run the app with docker compose. It listens on port 8080 so it can run on a server that already uses ports 80 and 443 (for example an OVH VPS with other sites). Terminate TLS on the web server already installed on that machine and proxy it to `http://127.0.0.1:8080`:
 ```sh
 sudo HOST=your-domain-name.com docker compose up
+```
+
+If 8080 is also taken, pick another port:
+```sh
+sudo HOST=your-domain-name.com HTTP_PORT=8081 docker compose up
 ```
 
 ## For Businesses
