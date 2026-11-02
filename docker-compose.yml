@@ -26,14 +26,13 @@ services:
       timeout: 5s
       retries: 5
 
+  # HTTP on 8080 so this stack can share an OVH server that already
+  # uses ports 80 and 443. Point the existing reverse proxy at
+  # http://127.0.0.1:8080, or set HTTP_PORT to another free port.
   caddy:
     image: caddy:latest
-    command: caddy reverse-proxy --from $HOST --to app:3000
+    command: caddy reverse-proxy --from :${HTTP_PORT:-8080} --to app:3000
     ports:
-      - 80:80
-      - 443:443
-      - 443:443/udp
+      - "${HTTP_PORT:-8080}:${HTTP_PORT:-8080}"
     volumes:
       - ./caddy:/data/caddy
-    environment:
-      - HOST=${HOST}
